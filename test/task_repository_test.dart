@@ -1,3 +1,4 @@
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:focus_flow/data/task_repository.dart';
 import 'package:focus_flow/models/task.dart';
@@ -56,5 +57,86 @@ void main() {
     expect(item.isCompleted, isTrue);
   });
   test('empty repositories have zero completion rate',
+ 
       () => expect(TaskRepository(const []).completionRate, 0));
+
+      test('adds a new task', () {
+  final repository = TaskRepository();
+
+  const task = Task(
+    id: '5',
+    title: 'Learn Flutter',
+    category: 'Learning',
+    priority: TaskPriority.high,
+    minutes: 60,
+  );
+
+  expect(repository.add(task), isTrue);
+  expect(repository.getAll(), contains(task));
+});
+
+test('does not add a task with an existing id', () {
+  final repository = TaskRepository();
+
+  const task = Task(
+    id: '1',
+    title: 'Another task',
+    category: 'Work',
+    priority: TaskPriority.low,
+    minutes: 15,
+  );
+
+  expect(repository.add(task), isFalse);
+  expect(repository.getAll().length, 4);
+});
+
+test('updates an existing task', () {
+  final repository = TaskRepository();
+
+  const updatedTask = Task(
+    id: '1',
+    title: 'Updated task',
+    category: 'Learning',
+    priority: TaskPriority.medium,
+    minutes: 50,
+  );
+
+  expect(repository.update(updatedTask), isTrue);
+  expect(repository.getAll().first.title, 'Updated task');
+  expect(repository.getAll().first.minutes, 50);
+});
+
+test('does not update an unknown task', () {
+  final repository = TaskRepository();
+
+  const task = Task(
+    id: '99',
+    title: 'Unknown task',
+    category: 'Work',
+    priority: TaskPriority.low,
+    minutes: 10,
+  );
+
+  expect(repository.update(task), isFalse);
+});
+
+test('deletes an existing task', () {
+  final repository = TaskRepository();
+
+  expect(repository.delete('1'), isTrue);
+  expect(repository.getAll().length, 3);
+  expect(
+    repository.getAll().any((task) => task.id == '1'),
+    isFalse,
+  );
+});
+
+test('does not delete an unknown task', () {
+  final repository = TaskRepository();
+
+  expect(repository.delete('99'), isFalse);
+  expect(repository.getAll().length, 4);
+});
 }
+
+
