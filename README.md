@@ -1,60 +1,120 @@
 # Focus Flow
+Focus Flow est une application Flutter de gestion de tâches et de sessions de concentration. Elle permet de planifier ses tâches, lancer des sessions de focus, suivre sa progression et utiliser l'application en français ou en anglais.
 
-[![CI](https://github.com/MEKA-Marie/flutter-production-ready/actions/workflows/ci.yml/badge.svg)](https://github.com/MEKA-Marie/flutter-production-ready/actions/workflows/ci.yml) [![Flutter](https://img.shields.io/badge/Flutter-3.19%2B-54C5F8?logo=flutter)](https://flutter.dev)
+## Fonctionnalités
 
-Focus Flow is a production-ready focus planner built with Flutter. It provides a calm daily workflow for planning tasks, running focus sessions, reviewing progress, and switching between English and French.
+* Tableau de bord
+* Gestion des tâches
+* Sessions de concentration
+* Suivi de la progression
+* Paramètres
+* Support français et anglais
+* Interface responsive
+* Accessibilité avec `Semantics`
+* Navigation Material 3
 
-## Features
+## Tests
 
-- Five responsive screens: Dashboard, Tasks, Focus, Insights, and Settings.
-- English and French localization with native Flutter delegates.
-- Accessible labels on interactive controls and Material 3 navigation.
-- Lazy task lists with `ListView.builder` and stable `const` widgets where possible.
-- Repository-driven business logic, isolated from presentation.
+Le projet comprend une suite de tests couvrant les différentes parties de l'application :
 
-## Evaluation checklist
+* **12 tests unitaires** pour les repositories et la logique métier
+* **5 tests de widgets** pour les écrans et la navigation
+* **2 tests d'intégration** pour les parcours principaux
 
-| Requirement | Evidence |
-| --- | --- |
-| 5+ functional screens | Dashboard, Tasks, Focus, Insights, Settings |
-| 10+ unit tests | 12 repository and domain tests in `test/task_repository_test.dart` |
-| 5+ widget tests | 5 navigation and screen tests in `test/widget_test.dart` |
-| 2+ integration tests | 2 end-to-end flows in `integration_test/app_test.dart` |
-| Performance | `ListView.builder`, `SliverList.builder`, const widgets, local state, no raster image payloads |
-| Accessibility | `Semantics`, Material navigation labels, labelled task controls and search |
-| Internationalization | English and French delegates with runtime language switch |
-| CI/CD | GitHub Actions runs format, analyze, tests, Linux integration, and APK build |
+Pour exécuter les tests :
+
+```bash
+flutter test
+```
+
+Pour les tests d'intégration :
+
+```bash
+flutter test integration_test/app_test.dart -d linux
+```
+
+## Performance
+
+L'application utilise :
+
+* `ListView.builder` et `SliverList.builder` pour le chargement différé des listes ;
+* des widgets `const` lorsque cela est possible ;
+* un état local afin de limiter les rebuilds inutiles ;
+* aucune image raster embarquée, l'application étant principalement basée sur du contenu textuel.
+
+Les performances peuvent être vérifiées avec Flutter DevTools.
 
 ## Architecture
 
-- `lib/models`: immutable domain models.
-- `lib/data`: repositories and data access.
-- `lib/l10n`: localization contract and delegates.
-- `lib/main.dart`: composition root and feature screens.
-- `test`: unit and widget tests.
-- `integration_test`: end-to-end smoke tests.
+```text
+lib/
+├── models/
+├── data/
+├── l10n/
+└── main.dart
 
-## Setup
+test/
+├── task_repository_test.dart
+└── widget_test.dart
+
+integration_test/
+└── app_test.dart
+
+.github/
+└── workflows/
+    └── ci.yml
+```
+
+La logique métier est séparée de la présentation grâce à une organisation basée sur les repositories.
+
+## Installation
+
+Cloner le projet :
+
+```bash
+git clone https://github.com/SouveraineMAB/flutter-production-ready.git
+cd flutter-production-ready
+```
+
+Installer les dépendances :
 
 ```bash
 flutter pub get
-flutter analyze
-flutter test
-flutter test integration_test -d linux
-flutter run
-flutter build apk --release
 ```
 
-The repository intentionally has no bundled raster images: this product is a text-first productivity tool, so there are no image payloads to decode or lazy-load. Scrollable content uses builder APIs and the UI keeps state local to avoid broad rebuilds. The Android platform is included so CI can produce a release APK.
+Lancer l'application :
 
-## Quality gates
+```bash
+flutter run
+```
 
-CI runs Dart formatting verification, static analysis, unit/widget tests, Linux integration tests, and an Android release build on every push and pull request. The generated APK is available in the workflow run under **Artifacts**. An iOS build requires macOS and Apple signing credentials and can be created with `flutter build ipa --release`.
+## Vérification
 
-## Screenshots
+Avant une livraison, exécuter :
 
-The application is designed for phone portrait layouts and adapts naturally to larger widths. Add exported device screenshots to `docs/screenshots/` after running the app on an emulator or physical device; the directory contains the capture instructions.
+```bash
+flutter analyze
+flutter test
+```
 
-## License
+Une pipeline **GitHub Actions** vérifie automatiquement le formatage, l'analyse statique, les tests, les tests d'intégration et la génération de l'APK Android.
 
-Public educational demonstration project.
+## Captures d'écran
+
+Les captures d'écran de l'application sont disponibles dans :
+
+```text
+docs/screenshots/
+```
+
+## CHANGELOG
+
+Les principales évolutions du projet sont documentées dans `CHANGELOG.md`, avec au minimum trois versions :
+
+* `v1.0.0`
+* `v1.1.0`
+* `v1.2.0`
+
+## Licence
+
+Projet éducatif réalisé dans le cadre d'un projet Flutter orienté production.
