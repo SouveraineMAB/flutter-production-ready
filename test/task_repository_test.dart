@@ -137,6 +137,59 @@ test('does not delete an unknown task', () {
   expect(repository.delete('99'), isFalse);
   expect(repository.getAll().length, 4);
 });
+
+test('ajoute une nouvelle tâche', () {
+  final repository = TaskRepository();
+
+  const task = Task(
+    id: '5',
+    title: 'Learn Flutter',
+    category: 'Learning',
+    priority: TaskPriority.high,
+    minutes: 60,
+  );
+
+  expect(repository.add(task), isTrue);
+  expect(repository.getAll(), contains(task));
+});
+
+test('refuse une tâche avec un identifiant existant', () {
+  final repository = TaskRepository();
+
+  const task = Task(
+    id: '1',
+    title: 'Another task',
+    category: 'Work',
+    priority: TaskPriority.low,
+    minutes: 15,
+  );
+
+  expect(repository.add(task), isFalse);
+  expect(repository.getAll().length, 4);
+});
+
+test('modifie une tâche existante', () {
+  final repository = TaskRepository();
+
+  const updatedTask = Task(
+    id: '1',
+    title: 'Updated task',
+    category: 'Learning',
+    priority: TaskPriority.medium,
+    minutes: 50,
+  );
+
+  expect(repository.update(updatedTask), isTrue);
+  expect(repository.getAll().first.title, 'Updated task');
+  expect(repository.getAll().first.minutes, 50);
+});
+
+test('supprime une tâche existante', () {
+  final repository = TaskRepository();
+
+  expect(repository.delete('1'), isTrue);
+  expect(repository.getAll().length, 3);
+});
 }
 
 
